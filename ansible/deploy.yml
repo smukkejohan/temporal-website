@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  tasks:
+    - name: build
+      shell: yarn build
+
+- hosts: temporal_webserver
+  tasks:
+  - name: Copy build to webservers
+    copy:
+      src: ../dist/
+      dest: ~/srv/temporal
+      force: yes
