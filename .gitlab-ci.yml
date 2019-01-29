@@ -5,16 +5,18 @@ stages:
 
 test:
   stage: test
-  script: echo "Running tests"
+  script: yarn test
 
 build:
   stage: build
-  script: echo "Building the app"
+  script: yarn build --branch master
 
 deploy_production:
   stage: deploy
+  tags:
+    - ansible
   script:
-    - echo "Deploy to production server"
+    - ansible-playbook -i staging ansible/deploy.yml
   environment:
     name: production
     url: http://temporal.dk

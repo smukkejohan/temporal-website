@@ -2,7 +2,7 @@
 - hosts: localhost
   tasks:
     - name: build
-      shell: yarn build
+      shell: yarn build 
 
 - hosts: temporal_webserver
   tasks:
