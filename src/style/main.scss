@@ -1,2 +1,11 @@
 @import "custom";
 @import "~bootstrap/scss/bootstrap";
+
+
+@include media-breakpoint-down(sm) {
+
+  header #splash-image {
+    height: 20em !important;
+  }
+
+}

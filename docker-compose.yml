@@ -5,5 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "80:80"
+
+    labels:
+      traefik.frontend.rule: "Host:temporal.dk"
+      traefik.port: 80
