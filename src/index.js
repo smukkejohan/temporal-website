@@ -18,7 +18,6 @@ function isScrolledIntoView(elem){
   return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
 }
 
-
 function scale(num, in_min, in_max, out_min, out_max) {
   if(num < in_min) num = in_min;
   if(num > in_max) num = in_max;
@@ -47,7 +46,6 @@ function toggleLogos() {
 
       //console.log(elTop, scrollTop) 
       navBrand.css('opacity', scale(elBottom - scrollTop, 0, elHeight, 1, 0));
-
   }
 
   navBrand.css('transition', "opacity 0.2s ease-in-out");
