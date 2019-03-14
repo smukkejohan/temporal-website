@@ -22,23 +22,38 @@ header::after {
   z-index: -1;   
 }
 
-.navbar-brand img {
-  margin-top: -0.2em;
+.temporal-logo {
+  height: 1.5em;
+  //margin-top: -0.2em;
+  //vertical-align: middle;
+  margin-right: 0.2em;
 }
 
-#logo {
-  width: 5.5em;
+.navbar-brand 
+{
+  font-size: 1.25em;
+  display: flex;
+  align-items:center;
+  .temporal-logo {
+    margin-right: 0.4em;
+  }
+
 }
+
 
 .brandtype {
   font-family: 'Cabin';
   font-weight: 200;
   letter-spacing: 0.4em;
+  vertical-align: middle;
 }
 
-header .brandtype {
-  letter-spacing: 0.4em;
-  font-size: 2em;
+header {
+  h1 {
+    display: flex;
+    align-items:center;
+    font-size: 2em;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -48,37 +63,31 @@ h1, h2, h3, h4, h5, h6 {
 
 @include media-breakpoint-up(sm) {
 
-  header .brandtype {
+  header h1 {
     font-size: 3em;
   }
 
-  #logo {
-    margin-top: -0.6em;
-    width: 4em;
-    margin-left: 0em;
-    margin-right: 1.6em;
-  }
+
 }
 
 @include media-breakpoint-up(md) {
-  header .brandtype {
+  header h1 {
     font-size: 4em;
   }
 
   #logo {
-    width: 5em;
-    margin-left: -2.5em;
+    margin-left: -0.5em;
   }
 }
 
 @include media-breakpoint-up(lg) {
 
-  header .brandtype {
+  header h1 {
     font-size: 5em;
   }
 
   #logo {
-    width: 6em;
+    //width: 6em;
   }
 
 }
