@@ -5,9 +5,9 @@ $font-family-sans-serif: 'Helvetica', sans-serif;
 
 @import "~bootstrap/scss/bootstrap";
 
-body {
-  opacity: 1;
-  transition: 1s opacity;
+.navbar-toggler {
+  font-size: 0.8em;
+  border: none;
 }
 
 header {
@@ -27,6 +27,18 @@ header::after {
   z-index: -1;   
 }
 
+nav {
+  background-color: rgba($gray-100,0.2);
+  transition: background-color 0.4s ease-in-out;
+}
+
+nav:hover {
+  background-color: rgba($gray-100,1);
+  .navbar-brand {
+    //opacity: 0.1 !important;
+  }
+}
+
 .temporal-logo {
   height: 1.5em;
   width: auto;
@@ -37,6 +49,7 @@ header::after {
 
 .navbar-brand 
 {
+  opacity: 1;
   font-size: 1.25em;
   display: flex;
   align-items:center;
