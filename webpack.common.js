@@ -9,7 +9,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name]-[hash].js',
-    sourceMapFilename: 'js/[name].js.map',
   },
 
   plugins: [
@@ -50,7 +49,7 @@ module.exports = {
               }
             }
           }, {
-            loader: 'sass-loader' // compiles Sass to CSS
+            loader: 'sass-loader',
           }
         ]
       },

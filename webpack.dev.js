@@ -8,6 +8,10 @@ module.exports = merge.smartStrategy({
    mode: 'development',
    devtool: 'inline-source-map',
 
+   output: {
+    sourceMapFilename: 'js/[name].js.map',
+   },
+
    devServer: {
     contentBase: './dist',
     compress: true,
@@ -22,8 +26,8 @@ module.exports = merge.smartStrategy({
         test: /\.(scss)$/,
         use: [
           {
-            loader: 'style-loader',
-          },
+            loader: 'style-loader'
+          }
         ]
       }
     ]
