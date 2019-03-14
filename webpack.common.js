@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -10,9 +11,22 @@ module.exports = {
     filename: 'js/[name]-[hash].js',
     sourceMapFilename: 'js/[name].js.map',
   },
-  module: {
 
-    
+  plugins: [
+    new CleanWebpackPlugin(),
+
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+    }),
+
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      inject: 'body'
+    })
+
+  ],
+
+  module: {
     rules: [
       { 
         test: /src.*\.js$/, 
@@ -22,23 +36,23 @@ module.exports = {
         
       {
         test: /\.(scss)$/,
-        use: [{
-          loader: 'style-loader', // inject CSS to page
-        }, {
-          loader: 'css-loader', // translates CSS into CommonJS modules
-        }, {
-          loader: 'postcss-loader', // Run post css actions
-          options: {
-            plugins: function () { // post css plugins, can be exported to postcss.config.js
-              return [
-                require('precss'),
-                require('autoprefixer')
-              ];
+        use: [
+          {
+            loader: 'css-loader', // translates CSS into CommonJS modules
+          }, {
+            loader: 'postcss-loader', // Run post css actions
+            options: {
+              plugins: function () { // post css plugins, can be exported to postcss.config.js
+                return [
+                  require('precss'),
+                  require('autoprefixer')
+                ];
+              }
             }
+          }, {
+            loader: 'sass-loader' // compiles Sass to CSS
           }
-        }, {
-          loader: 'sass-loader' // compiles Sass to CSS
-        }]
+        ]
       },
 
       { test: /\.html$/, loader: 'html-loader' },
@@ -49,26 +63,14 @@ module.exports = {
           loader: 'url-loader',
           options: {
             limit: 8192,
-            name: 'images/[hash]-[name].[ext]'
+            name: 'images/[name]-[hash].[ext]'
           }
         }]
       },
 
       
     ]
-  },
-  plugins: [
-
-    new CleanWebpackPlugin(),
-
-    new ExtractTextPlugin('css/bundle.css'),
-
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      inject: 'body'
-    })
-
-  ],
+  }
 
   
 };

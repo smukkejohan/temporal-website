@@ -5,6 +5,11 @@ $font-family-sans-serif: 'Helvetica', sans-serif;
 
 @import "~bootstrap/scss/bootstrap";
 
+body {
+  opacity: 1;
+  transition: 1s opacity;
+}
+
 header {
   background-color: rgba(255,255,255,0.3); 
 }
@@ -38,9 +43,7 @@ header::after {
   .temporal-logo {
     margin-right: 0.4em;
   }
-
 }
-
 
 .brandtype {
   font-family: 'Cabin';
@@ -55,6 +58,9 @@ header {
     align-items:center;
     font-size: 2em;
   }
+  .lead {
+    text-shadow: $gray-200 0.01em 0.01em 0.8em;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -63,7 +69,13 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.06em;
 } 
 
+#teaser {
+  margin-top: -7.5em;
+  text-shadow: $gray-200 0.01em 0.01em 0.8em;
+}
+
 section#contact {
+  margin-top: 3em;
   background-color: $gray-300;
   color: $gray-900;
 }
@@ -76,7 +88,7 @@ section#copyright {
 @include media-breakpoint-up(sm) {
 
   header h1 {
-    font-size: 3em;
+    font-size: 2.5em;
   }
 
 
