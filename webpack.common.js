@@ -1,4 +1,5 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -6,9 +7,8 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/bundle.js',
+    filename: 'js/[name]-[hash].js',
     sourceMapFilename: 'js/[name].js.map',
-
   },
   module: {
 
@@ -17,7 +17,7 @@ module.exports = {
       { 
         test: /src.*\.js$/, 
         use: ['babel-loader'], 
-        exclude: /(node_modules|bower_components)/ 
+        exclude: /(node_modules)/ 
       },
         
       {
@@ -52,11 +52,15 @@ module.exports = {
             name: 'images/[hash]-[name].[ext]'
           }
         }]
-      }
+      },
+
       
     ]
   },
   plugins: [
+
+    new CleanWebpackPlugin(),
+
     new ExtractTextPlugin('css/bundle.css'),
 
     new HtmlWebpackPlugin({
@@ -66,10 +70,5 @@ module.exports = {
 
   ],
 
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 9000,
-  }
   
 };

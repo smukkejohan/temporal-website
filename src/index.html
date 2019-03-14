@@ -9,8 +9,10 @@
   </head>
   <body>
     <main>
-      <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+
+        <div class="container-fluid">
+
+        <nav class="navbar navbar-expand-lg fixed-top navbar-light">
             <a class="navbar-brand" href="#">
               <img src="./images/logo.png" alt="Temporal Logo" class="temporal-logo"> 
               <span class="brandtype">TEMPORAL</span></a>
@@ -19,7 +21,7 @@
             </button>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
+              <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                   <a class="nav-link" href="#about">About</a>
                 </li>
@@ -33,7 +35,7 @@
 
           <header class="row p-0 vh-100 align-content-center">
 
-              <div class="col-12  offset-md-1">
+              <div class="col-11  offset-md-1">
 
                   <h1 class="mt-5 d-none d-sm-block">
                       <img id="logo" src="./images/logo.png" alt="Temporal Logo" class="temporal-logo"> 
@@ -50,11 +52,13 @@
               </div>       
 
         </header>
+      </div>
 
+      <div class="container">
         <section class="row mt-4" id="about">
-          <div class="col offset-md-1">
+          <div class="col">
             <div class="row">
-              <div class="col-md-8">
+              <div class="col-md-6 offset-md-5">
                         <h2 class="display-6">Who we are</h2>
 
                         <p>Temporal is started by <a href="http://johan.cc">Johan Bichel Lindegaard</a> and <a href="http://www.harveybewley.com/">Harvey Bewley</a>. 
@@ -72,7 +76,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-8 mt-4">
+                <div class="col-md-6 offset-md-1 mt-4">
                     <h3 class="display-6">Hands-on and Collaborative Prototyping</h3>
                     <p>
                         We believe making and thinking to be one and the same. Therefore creating a shared environment to explore ideas and technologies with our hands is core to what we do. We have access to a wide range of manufacturing and rapid prototyping tools and a network of skilled crafts people to help us materialise the things we can’t.
@@ -81,7 +85,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-8 mt-4">
+                <div class="col-md-6 mt-4 offset-md-5">
                     <h3 class="display-6">Responsible Design</h3>
                     <p>
                         As designers and makers shaping the future of technology we have a responsibility to be engaged in the complex ethical, environmental and social implications of the things we make. Our experience in this field allows us to separate trends and buzzwords from core meaning and impact. 
@@ -90,7 +94,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-8 mt-4">
+                <div class="col-md-6 offset-md-1 mt-4">
                     <h3 class="display-6">Flexibility, Honesty, Accuracy</h3>
                     <p>
                         We understand that collaborative projects can be messy. As a small team we are flexible in our collaborative methods with partners, but we make sure we only promise what we can deliver so you get no surprises. 
@@ -101,26 +105,35 @@
           </div>
         </section>
 
-        <section class="row" id="contact">
+      </div>
 
-            <div class="col-md-8 offset-md-1 mt-4 ">
 
-              <h2 class="display-6">Get in touch</h2>
-              <p>Email: temporalstudio@pm.me</p>
 
-            </div>
 
-        </section>
 
-        <footer class="row">
-              <div class="col offset-md-1">
+      <footer class="container-fluid">
+
+
+          <section class="row" id="contact">
+            
+                <div class="col text-center mt-4 ">
+                    <h2 class="display-6">Contact Us</h2>
+                    <p>temporalstudio@pm.me</p>
+                </div>
+          </section>
+
+
+            <section class="row" id="copyright">
+              <div class="col text-right">
                 <p class="small mt-4">
                     © 2019, Temporal, All rights reserved 
                 </p>
               </div>
-        </footer>
+            </section>
 
-      </div>
+        </footer>
+      
+
     </main>
   </body>
 </html>
