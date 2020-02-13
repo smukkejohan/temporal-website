@@ -3,3 +3,4 @@ node_modules
 bower_components
 ansible/*.retry
 yarn-error.log
+.DS_Store
