@@ -5,13 +5,16 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-
 module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name]-[hash].js',
   },
+
+  //devServer: {
+  //  writeToDisk: true
+  //},
 
   plugins: [
     new CleanWebpackPlugin(),
@@ -69,6 +72,17 @@ module.exports = {
           options: {
             limit: 8192,
             name: 'images/[name]-[hash].[ext]'
+          }
+        }]
+      },
+
+      {
+        test: /\.(stl)$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            limit: 8192,
+            name: '3d/[name].[ext]' // -[hash] FIXME ??
           }
         }]
       },
