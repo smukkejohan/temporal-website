@@ -11,10 +11,10 @@ import {STLLoader} from 'three/examples/jsm/loaders/STLLoader'
 
 require('./3d/logo_distortedthinwall.stl')
 require('./3d/logo_distortedsurfaces.stl')
+require('./3d/cylinder_cutout_logo.stl')
 
 var container, stats;
 var camera, scene, renderer;
-var distortedThinWall;
 
 function init() {
 
@@ -27,8 +27,8 @@ function init() {
 
   var frustumSize = 1000;
 
-  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-  //camera = new THREE.OrthographicCamera(frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 2000 );
+  //camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+  camera = new THREE.OrthographicCamera(frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, -1000, 8000 );
   
   //Vector3 {x: 621.1727658528029, y: 618.494835847818, z: 619.7649013879068}
   camera.position.set( 220, 220, 220 );
@@ -36,9 +36,9 @@ function init() {
 
   scene.add( camera );
 
-  scene.add( new THREE.AmbientLight( 0xf0f0f0 ) );
+  scene.add( new THREE.AmbientLight( 'white' ) );
   var light = new THREE.SpotLight( 0xffffff, 1.5 );
-  light.position.set( 0, 1500, 200 );
+  light.position.set( 500, 500, 1500 );
   light.angle = Math.PI * 0.2;
   light.castShadow = true;
   light.shadow.camera.near = 200;
@@ -46,7 +46,7 @@ function init() {
   light.shadow.bias = - 0.000222;
   light.shadow.mapSize.width = 1024;
   light.shadow.mapSize.height = 1024;
-  scene.add( light );
+  //scene.add( light );
 
   /*var planeGeometry = new THREE.PlaneBufferGeometry( 2000, 2000 );
   planeGeometry.rotateX( - Math.PI / 2 );
@@ -63,41 +63,65 @@ function init() {
   const sphereRadius = (2/2) * 10 * scaleFactor;
   const cubeLength = 3 * 10 * scaleFactor;
 
-  var geometryCube = new THREE.BoxBufferGeometry( cubeLength, cubeLength, cubeLength );
-  var material = new THREE.MeshBasicMaterial( {color: "black", wireframe: true, wireframeLinewidth: 8} );
+  var geometryCube = new THREE.BoxGeometry( cubeLength, cubeLength, cubeLength );
+  var material = new THREE.MeshBasicMaterial( {color: "red", wireframe: true, wireframeLinewidth: 8} );
   var cube = new THREE.Mesh( geometryCube, material );
-  //scene.add( cube );
 
-  var geometrySphere = new THREE.SphereBufferGeometry( sphereRadius, 60, 60 );
-  var material = new THREE.MeshBasicMaterial( {color: "grey", wireframe: false} );
-  var sphere = new THREE.Mesh( geometrySphere, material );
-  scene.add( sphere );
+  var edges = new THREE.EdgesGeometry( geometryCube, 4 );
+  var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: "black" } ) );
+
+  //scene.add( line );
+
+  var geometryCylinder = new THREE.CylinderGeometry( sphereRadius, sphereRadius, cubeLength*0.1, 60, 1, false, 240*Math.PI/180, 120*Math.PI/180 );
+  var material = new THREE.MeshBasicMaterial( {color: "black", wireframe: false} );
+  material.flatShading = true;
+  var backgroundObj = new THREE.Mesh( geometryCylinder, material );
+
+  backgroundObj.lookAt( camera.getWorldPosition() )
+  backgroundObj.rotateOnAxis(new THREE.Vector3(1,0,0), 90*Math.PI/180)
+  backgroundObj.translateY(- cubeLength*2.5)
+
+  scene.add( backgroundObj );
+
+  var geometryCylinder = new THREE.CylinderGeometry( sphereRadius, sphereRadius, cubeLength*2, 60, 1, false, 240*Math.PI/180, 120*Math.PI/180  );
+    
+  var material = new THREE.MeshBasicMaterial( {color: "black", wireframe: false} );
+  var cylinder = new THREE.Mesh( geometryCylinder, material );
+
+  cylinder.lookAt( camera.getWorldPosition() )
+  cylinder.rotateOnAxis(new THREE.Vector3(1,0,0), 90*Math.PI/180)
+
+  var edges = new THREE.EdgesGeometry( geometryCylinder, 4 );
+  var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: "black" } ) );
+
+  line.lookAt( camera.getWorldPosition() )
+  line.rotateOnAxis(new THREE.Vector3(1,0,0), 90*Math.PI/180)
+  //scene.add( line );
+
+  //scene.add( cylinder );
+
 
   var loader = new STLLoader();
-				loader.load('./3d/logo_distortedthinwall.stl', function ( geometry ) {
-
+				loader.load('./3d/cylinder_cutout_logo.stl', function ( geometry ) {
           
-					var material = new THREE.MeshBasicMaterial( { color: 'gray', wireframe: false} );
-          distortedThinWall = new THREE.Mesh( geometry, material );
+          var material = new THREE.MeshPhongMaterial( { color: 'pink', wireframe: true} );
+          material.flatShading = true
+          var mesh = new THREE.Mesh( geometry, material );
           
-          distortedThinWall.rotation.set( 270*Math.PI/180, 0, 0 );
-          distortedThinWall.scale.set( scaleFactor, scaleFactor, scaleFactor );
-          distortedThinWall.position.set( 0, 0, 0 );
-
-					distortedThinWall.castShadow = true;
-          distortedThinWall.receiveShadow = true;
-          
+          mesh.rotation.set( 270*Math.PI/180, 0, 0 );
+          mesh.scale.set( scaleFactor, scaleFactor, scaleFactor );
+          mesh.position.set( 0, 0, 0 );
           
           var edges = new THREE.EdgesGeometry( geometry, 4 );
           var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: "black" } ) );
-          
+
           line.rotation.set( 270*Math.PI/180, 0, 0 );
           line.scale.set( scaleFactor, scaleFactor, scaleFactor );
           line.position.set( 0, 0, 0 );
 
           scene.add( line );
 
-					//scene.add( distortedThinWall );
+					scene.add( mesh );
 				} );
 
   /*var helper = new THREE.GridHelper( 2000, 100 );
