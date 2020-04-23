@@ -175,11 +175,10 @@ function setupScene2() {
 
   camera.position.set( 0, 0, 100 );
   camera.lookAt(0,0,0);
-  const sU = (window.innerWidth*0.01) // base scale unit, height of hexagon at z 0  
+  const sU = (window.innerWidth*0.01) // base scale unit, height of triangle at z 0  
 
   var angle = Math.PI/6;
-  var c = new Vector3(0,0,0);
-
+  var center = new Vector3(0,0,0);
 
   const getHexCoord = (i, height, startAngle) => {
     let a = startAngle + (i * 2 * Math.PI / 6);
@@ -187,42 +186,106 @@ function setupScene2() {
   }
 
   const zWidthAtZero = visibleHeightAtZDepth(0, camera); 
+  const lineWidthScale = 1.02; // 1.05
 
-  var triangles = [1, 0.5, -1.6, -0.8, 1.6, 0.1 ].map( (zF, i) => {
-
+  var triangles = [1.2, 0.8, -1.8, -0.9, 1.8, 0.5 ].map( (zF, i) => {
+    //zF = 0 for debugging
     let geom = new THREE.Geometry();
+    let v1 = center.clone()
     let v2 = getHexCoord(0+i, sU, angle); //new Vector3(-sU,-sU/2, 0);
     let v3 = getHexCoord(1+i, sU, angle); //new Vector3(0, -sU, 0);
-    let triangle = new THREE.Triangle( c.clone(), v2, v3 );
+    let triangle = new THREE.Triangle( v1, v2, v3 );
     let normal = triangle.normal();
-  
+
     geom.vertices.push(triangle.a);
     geom.vertices.push(triangle.b);
     geom.vertices.push(triangle.c);
+    /*var vertices = new Float32Array( 
+      [c.clone(), A, B]
+     );*/
+    
+    // itemSize = 3 because there are 3 values (components) per vertex
+    //geom.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+
     geom.faces.push( new THREE.Face3( 0, 1, 2, normal ) );
+
+    let bgGeom = geom.clone() // clone before any transformations
+    
+    if(i==3 || i==2) {
+      //triangle.a = triangle.a.sub( new Vector3(0, sU*lineWidthScale, 0))
+      //geom.applyMatrix( new THREE.Matrix4().setTranslation( 0, 10, 0 ) );
+
+      let v3Target = v2.clone()
+      let edgeCenter = v2.clone().lerp(v3, 0.5)
+      let v2Target = v3.clone()
+
+      let d1 = edgeCenter.distanceToSquared(v1)
+      let d2 = v2.distanceToSquared(v3)
+
+      let newCenter = v1.clone().lerp(edgeCenter,(lineWidthScale-1)*2)
+      //console.log(d1, d2)
+      //v1.lerp(edgeCenter, -(1-lineWidthScale))
+      //v2.lerp(v2Target, -(1-lineWidthScale) * (d1/d2) /**0.5*/ )
+      //v3.lerp(v3Target, -(1-lineWidthScale) * (d1/d2))
+      /*
+      if(i==3) {
+        v2.lerp(v2Target, -(1-lineWidthScale) * (d1/d2) ) //*0.5
+        v3.lerp(v3Target, -(1-lineWidthScale) * (d1/d2))
+      } else {
+        v2.lerp(v2Target, - (1-lineWidthScale) * (d1/d2) )
+        v3.lerp(v3Target, -(1-lineWidthScale) * (d1/d2) )  //*0.5
+      }
+      */
+      //C.subVectors( B, A ).multiplyScalar( 1 + ( len / C.length() ) ).add( A );
+ 
+      let matrix = new THREE.Matrix4()
+      matrix.setPosition(newCenter)
+      matrix.scale(new Vector3( 1-(lineWidthScale-1)*2, 1-(lineWidthScale-1)*2, 1))
+      //geom.applyMatrix4( matrix )
+      //geom.scale(0.9,0.9,1)
+      geom.applyMatrix4( matrix )
+
+      //geom.translate( ,0,0 ); // three.js r.72
+
+      //geom.tr
+      // scale theese triangles in the right direction to crate the missing line
+    }
 
     let zT = sU*zF;
     let s = visibleHeightAtZDepth(zT, camera) / zWidthAtZero;
     geom.translate(0,0,zT)
     geom.scale(s,s,1)
 
+    let mat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, color: 'pink' })
+    //if(i==3 || i==2) { mat.color.setColorName("blue")}
+    let mesh = new THREE.Mesh( geom, mat)
+    scene.add(mesh)
+
+    let bgZT = zT - sU*0.1
+    let bgS = visibleHeightAtZDepth(bgZT, camera) / zWidthAtZero * lineWidthScale;
+    bgGeom.translate(0,0,bgZT)
+    bgGeom.scale(bgS,bgS,1)
+    
+    bgGeom.translate(0,0,-sU*0.1)
+    bgGeom.scale(lineWidthScale, lineWidthScale, 1)
+    let bgmat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, color: 'black' })
+    let bgMesh = new THREE.Mesh( bgGeom, bgmat);
+
+    scene.add(bgMesh)
     return geom; 
 
   }) 
 
-  //triangles[2].translate(0,0,-10)
-  //triangles[3].translate(0,0,0)
-  //triangles[1].translate(0,0,10)
-  //triangles[0].translate(0,0,20)
-  //triangles[5].translate(0,0,30)
-
-
-
-
-  triangles.map( (geom) => {
-    let mesh = new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: "hsl(0, 50%, 0%)" }) );
-    scene.add(mesh)
-  })
+  const circleRadius = sU*0.4;
+  var sphereGeometry = new THREE.SphereBufferGeometry( circleRadius, 64, 64 );
+  
+  let zT = sU*-0.4;
+  let s = visibleHeightAtZDepth(zT, camera) / zWidthAtZero;
+  sphereGeometry.translate(0,0,zT)
+  sphereGeometry.scale(s,s,1)
+  
+  var sphere = new THREE.Mesh( sphereGeometry, new THREE.MeshBasicMaterial( { color: "black", side: THREE.DoubleSide } ) );
+  scene.add( sphere );
 
 }
 
@@ -233,7 +296,7 @@ function setupScene() {
 
   // size 
   // 2/3 
-  const sphereRadius = (2/2) * 10 * scaleFactor;
+  const sphereRadius = 10 * scaleFactor;
   const cubeLength = 3 * 10 * scaleFactor;
 
   var geometryCube = new THREE.BoxBufferGeometry( cubeLength, cubeLength, cubeLength );
