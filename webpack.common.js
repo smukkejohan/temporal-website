@@ -75,6 +75,7 @@ module.exports = {
         }]
       },
 
+      /*
       { test: /\.stl$/,
         use: [{
           loader: 'file-loader',
@@ -83,7 +84,7 @@ module.exports = {
             name: '3d/[name].[ext]' // -[hash] FIXME ??
           }
         }]
-      },
+      },*/
 
 
         {

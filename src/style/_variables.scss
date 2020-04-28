@@ -1,0 +1,8 @@
+// variables.scss
+$temporal-pink: hsl(350, 100%, 88%);
+$background-color: $temporal-pink;
+
+// the :export directive is the magic sauce for webpack
+:export {
+  backgroundcolor: $background-color;
+}
