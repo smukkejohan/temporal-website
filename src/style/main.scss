@@ -16,26 +16,69 @@ $font-path: '/style/fonts/';
 
 
 html, body {
-  max-width: 100%;
+  max-width: 100vw;
   overflow-x: hidden;
   background-color: $background-color;
 }
 
-h1.brandtype {
 
-  margin-top: 1em;
-  margin-left: 1em;
+main {
+  min-height: 100vh;
+  //opacity: 0;
+  background-color:none;
 
-  font-family: /*'Cabin',*/ 'Jellee';
-  font-weight: 300;
-  letter-spacing: .2em;
+}
+
+
+header {
+  
+  //background:inherit;
+  position:fixed;
+  z-index:10;
+
+  height: 100vh;
+  width: 100vw;
+
+  h1.brandtype {
+    font-family: /*'Cabin',*/ 'Jellee';
+    font-weight: 300;
+    letter-spacing: .2em;
+
+    position: absolute;
+    top: 1em;
+    left: 1em;
+  }
+
+  h2.tagline {
+    font-weight: 100;
+    font-family: 'helvetica';
+    
+    width: 50vw; 
+    position: absolute;
+    bottom: 1em;
+    left: 1em;
+  }
+
+
+  nav {
+    width: 50vw; 
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    ul {
+      display: inline;
+    }
+  }
+  
 }
 
 #three {
-  position: absolute;
-  z-index: -100;
-  height: 100%;
-  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  height: 100vh;
+  width: 100vw;
 }
 
 

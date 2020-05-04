@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+name: Build and test
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [13.x]
+        node-version: [12.x, 13.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -24,6 +24,23 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn install --dev
+    - run: yarn install --frozen-lockfile --dev
     - run: yarn build
     - run: yarn test
+      env:
+        CI: true
+
+    - name: copy file via ssh key
+      uses: appleboy/scp-action@master
+      env:
+        HOST: khophi.com
+        USERNAME: khophi
+        PORT: 22
+        KEY: ${{ secrets.forSSH }}
+      with:
+        source: "./dist/your-angular-app-name/"
+        target: "/home/user/domain.com/pwa/"
+        strip_components: 3 # this is important
+   
+
+  
