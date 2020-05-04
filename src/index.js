@@ -1,6 +1,6 @@
-import 'bootstrap/js/dist/util'
-import 'bootstrap/js/dist/collapse'
-import 'bootstrap/js/dist/scrollspy'
+//import 'bootstrap/js/dist/util'
+//import 'bootstrap/js/dist/collapse'
+//import 'bootstrap/js/dist/scrollspy'
 
 import * as THREE from 'three'
 import { Vector3, Vector2 } from 'three'
@@ -10,7 +10,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import TWEEN from '@tweenjs/tween.js'
 
-import {visibleHeightAtZDepth, getRandomArbitrary} from './lib'
+import {visibleHeightAtZDepth, visibleWidthAtZDepth, getRandomArbitrary} from './lib'
 
 import './style/main.scss'
 import style from './style/_variables.scss'
@@ -21,7 +21,7 @@ const center = new Vector3(0,0,0)
 const initialCameraPosition = new Vector3(getRandomArbitrary(-200, 200),getRandomArbitrary(-200, 200),getRandomArbitrary(-80, 80))
 if(debug) console.debug("initialCameraPosition", initialCameraPosition)
 
-const baseCameraPosition = new Vector3(0,0,80)
+const baseCameraPosition = new Vector3(0,0,window.innerWidth/2) // Base camera distance of the viewport width
 
 const primaryColor = new THREE.Color(style.backgroundcolor)
 const backgroundColor = primaryColor.clone()
@@ -68,10 +68,9 @@ function init() {
   setupScene();
 
   // Controls
-  /*var controls = new OrbitControls( camera, renderer.domElement );
+  var controls = new OrbitControls( camera, renderer.domElement );
   controls.damping = 0.1;
   controls.addEventListener( 'change', render );
-*/
 
   document.addEventListener( 'mousemove', onDocumentMouseMove, false );
   window.addEventListener( 'resize', onWindowResize, false );
@@ -83,19 +82,22 @@ function setupScene() {
   camera.lookAt(center);
 
   // TODO: increase relative size of logo on smaller display
-  const sU = (window.innerWidth*0.01) // base scale unit, height of triangle at z 0  
+  const sU = (window.innerWidth*0.06) // base scale unit, height of triangle at z 0  
+  // if(window.innerWidth > 200)
   const hexagonAngle = Math.PI/6;
   const logoCircleRadius = sU*0.4;
+  
+  const widthAtZZero = visibleWidthAtZDepth(0, camera); 
+  const heightAtZZero = visibleHeightAtZDepth(0, camera); 
 
-  const zWidthAtZero = visibleHeightAtZDepth(0, camera); 
-  const lineWidthScale = 1.025; // 1.05
+  const lineWidthScale = 1.032; 
 
   const getHexagonVertex = (i, height, center, startAngle) => {
     let a = startAngle + (i * 2 * Math.PI / 6);
     return new Vector3(height*Math.cos(a) + center.x, height*Math.sin(a) + center.y, center.z);
   }
 
-  [1.2, 0.8, -1.8, -0.9, 1.8, 0.5 ].map( (zF, i) => {
+  [2.6, 1.6, -2.6, -1.1, 2.1, 0.9 ].map( (zF, i) => {
     //zF = 0 for debugging
     let geom = new THREE.Geometry();
     let v1 = center.clone()
@@ -120,7 +122,7 @@ function setupScene() {
     let bgGeom = geom.clone() // clone before any transformations
     
     if(i==2 || i==3) {
-      const s = (lineWidthScale-1)*2;
+      const s = (lineWidthScale-1)*1.4;
       let edgeCenter = v2.clone().lerp(v3, 0.5)
       let newCenter = v1.clone().lerp(edgeCenter,s)
  
@@ -131,18 +133,22 @@ function setupScene() {
     }
 
     let zT = sU*zF;
-    let s = visibleHeightAtZDepth(zT, camera) / zWidthAtZero;
+    let sW = visibleWidthAtZDepth(zT, camera) / widthAtZZero;
+    let sH = visibleHeightAtZDepth(zT, camera) / heightAtZZero;
+
     geom.translate(0,0,zT)
-    geom.scale(s,s,1)
+    geom.scale(sW,sH,1)
 
     let mat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, color: primaryColor })
     let mesh = new THREE.Mesh( geom, mat)
     scene.add(mesh)
 
     let bgZT = zT - sU*0.1
-    let bgS = visibleHeightAtZDepth(bgZT, camera) / zWidthAtZero * lineWidthScale;
+    let bgSW = visibleWidthAtZDepth(bgZT, camera) / widthAtZZero * lineWidthScale;
+    let bgSH = visibleHeightAtZDepth(bgZT, camera) / heightAtZZero * lineWidthScale;
+
     bgGeom.translate(0,0,bgZT)
-    bgGeom.scale(bgS,bgS,1)
+    bgGeom.scale(bgSW,bgSH,1)
     
     bgGeom.translate(0,0,-sU*0.1)
     bgGeom.scale(lineWidthScale, lineWidthScale, 1)
@@ -154,8 +160,8 @@ function setupScene() {
   }) 
   
   var sphereGeometry = new THREE.SphereBufferGeometry( logoCircleRadius, 64, 24, 24 );
-  let zT = sU*-0.4;
-  let s = visibleHeightAtZDepth(zT, camera) / zWidthAtZero;
+  let zT = 0//sU*-0.4;
+  let s = visibleHeightAtZDepth(zT, camera) / heightAtZZero;
   sphereGeometry.translate(0,0,zT)
   sphereGeometry.scale(s,s,1)
   
@@ -196,9 +202,7 @@ function animate(time) {
 
   camera.lookAt(center);
 
-
   lastMousePos.set(mousePos.x, mousePos.y)
-
 
   render();
 
@@ -226,7 +230,9 @@ function onWindowResize() {
   renderer.setSize( window.innerWidth, window.innerHeight );
   camera.aspect = window.innerWidth / window.innerHeight;
   // TODO: update scaling of logo
-  camera.updateProjectionMatrix();
+  camera.updateProjectionMatrix()
+  // setupScene() - 
+
 }
 
 function onDocumentMouseMove( event ) {
@@ -250,10 +256,6 @@ $( document ).ready(function() {
   }, 2000)
 
   loadingTween.start()
-
-  loadingTween.onUpdate(function(object){
-    //console.log(object)
-  });
 
   animate();
 });

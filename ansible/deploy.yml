@@ -4,7 +4,7 @@
     - name: build
       shell: yarn build 
 
-- hosts: temporal_webserver
+- hosts: webserver
   tasks:
   - name: Copy build to webservers
     copy:
