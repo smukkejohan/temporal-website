@@ -1,14 +1,10 @@
-import 'bootstrap/js/dist/util'
-//import 'bootstrap/js/dist/collapse'
-//import 'bootstrap/js/dist/scrollspy'
-
 import * as THREE from 'three'
 import { Vector3, Vector2 } from 'three'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { GUI } from 'three/examples/jsm/libs/dat.gui.module'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-
+//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import TWEEN from '@tweenjs/tween.js'
+import _ from 'lodash'
 
 import {visibleHeightAtZDepth, visibleWidthAtZDepth, getRandomArbitrary} from './lib'
 
@@ -68,12 +64,17 @@ function init() {
   setupScene();
 
   // Controls
-  var controls = new OrbitControls( camera, renderer.domElement );
+  /*var controls = new OrbitControls( camera, renderer.domElement );
   controls.damping = 0.1;
   controls.addEventListener( 'change', render );
+  */
 
-  document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-  window.addEventListener( 'resize', onWindowResize, false );
+  document.addEventListener( 'mousemove', onDocumentMouseMove, false )
+  window.addEventListener( 'resize', onWindowResize, false )
+
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener('orientationchange', onOrientationChange, false)
+  }
 }
 
 function setupScene() {
@@ -226,14 +227,43 @@ function render() {
   renderer.render( scene, camera );
 }
 
-function onWindowResize() {
+
+function resize() {
+
   renderer.setSize( window.innerWidth, window.innerHeight );
   camera.aspect = window.innerWidth / window.innerHeight;
+
+  // We execute the same script as before
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+
   // TODO: update scaling of logo
   camera.updateProjectionMatrix()
   // setupScene() - 
 
 }
+
+var resizeDebounced = _.debounce(resize, 20)
+
+function onOrientationChange() {
+  //console.log(screen.orientation);
+  resize()
+}
+
+function onWindowResize() {
+  //console.log("resize")
+  let size = new Vector2();
+  renderer.getSize(size);
+
+  // Avoid resizing because of address bar on mobile by not resizing on vertical expansion 
+  if(Math.abs(size.x - window.innerWidth) == 0 && Math.abs(size.y - window.innerHeight) < 100)  {
+    return
+  }
+
+  resizeDebounced()
+ 
+}
+
 
 function onDocumentMouseMove( event ) {
   mouseX = ( event.clientX - window.innerWidth/2 )
@@ -242,7 +272,12 @@ function onDocumentMouseMove( event ) {
 }
 
 
-$( document ).ready(function() {
+// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+let vh = window.innerHeight * 0.01;
+// Then we set the value in the --vh custom property to the root of the document
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+document.addEventListener( "DOMContentLoaded", function() {
   init();
 
   // Load with a slight zoom animation
@@ -256,12 +291,11 @@ $( document ).ready(function() {
   }, 2000)
 
   loadingTween.start()
-
   animate();
 });
 
 
-function isScrolledIntoView(elem){
+/*function isScrolledIntoView(elem){
   var $elem = $(elem);
   var $window = $(window);
 
@@ -272,7 +306,7 @@ function isScrolledIntoView(elem){
   var elemBottom = elemTop + $elem.height();
 
   return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-}
+}*/
 
 function scale(num, in_min, in_max, out_min, out_max) {
   if(num < in_min) num = in_min;

@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+//const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -20,7 +20,7 @@ module.exports = {
     new CleanWebpackPlugin(),
 
     new webpack.ProvidePlugin({
-      $: 'jquery',
+      //$: 'jquery',
     }),
 
     new CopyWebpackPlugin([
@@ -65,12 +65,26 @@ module.exports = {
 
       { test: /\.html$/, loader: 'html-loader' },
 
-      { test: /\.(png|svg|jpe?g|gif|ttf|eot|otf|woff2?)$/,
+      { test: /\.(png|svg|jpe?g|gif)$/,
         use: [{
           loader: 'url-loader',
           options: {
             limit: 8192,
-            name: 'images/[name]-[hash].[ext]'
+            name: '[name]-[hash].[ext]',
+            outputPath: 'images/'
+          }
+        }]
+      },
+
+      { test: /\.(ttf|eot|otf|woff2?)$/,
+        use: [{
+          loader: 'file-loader',
+          //
+          options: {
+            include: [/fonts/],
+            name: "[name]-[hash].[ext]",
+            outputPath: 'fonts',
+            publicPath: url => '../fonts/' + url
           }
         }]
       },
@@ -87,14 +101,14 @@ module.exports = {
       },*/
 
 
-        {
+       /* {
           test: /\.(glsl|vs|fs|vert|frag)$/,
           exclude: /node_modules/,
           use: [
             'raw-loader',
             'glslify-loader'
           ]
-        }
+        }*/
 
       
     ]

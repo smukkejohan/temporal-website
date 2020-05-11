@@ -7,7 +7,7 @@
 - hosts: webserver
   tasks:
   - name: Copy build to webservers
-    copy:
+    synchronize:
       src: ../dist/
       dest: ~/srv/temporal
-      force: yes
+      delete: true
