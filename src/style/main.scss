@@ -26,6 +26,7 @@ html {
 
 html {
   background-color: $background-color;
+  color: $text-color;
 }
 
 html, body {
@@ -40,15 +41,10 @@ html, body {
     font-size: 16px;
   }
 
-}
+  @media screen and (min-width: $xl-breakpoint) {
+    font-size: 18px;
+  }
 
-#splash, main section, footer section {
-  margin: 0 auto;
-  max-width: $lg-breakpoint;
-}
-
-main section {
-  //padding: 0 1rem;
 }
 
 // mobile first
@@ -73,8 +69,10 @@ main section {
     padding: 1rem;
     font-family: /*'Cabin',*/ 'Jellee';
     font-weight: 300;
-    letter-spacing: .2em;
+    //letter-spacing: .05em;
     width: 100%;
+    font-size: 1.4em;
+    color: black;
   }
 
   nav {
@@ -88,10 +86,14 @@ main section {
       li {
         padding: 0.2em 0;
         a {
-          color: rgb(0,0,0);
+          color: $headline-color;
           letter-spacing: .05em;
           font-weight: 400;
-          
+          text-decoration: solid underline;
+          &:hover {
+            text-decoration-color: lighten($background-color, 10%);
+            
+          }
           //text-decoration: none;
         }
       }
@@ -109,8 +111,7 @@ main section {
     width: 100%;
   }
 
-
-  @media screen and (min-width: $sm-breakpoint) {
+  @media screen and (min-width: $sm-breakpoint)  {
     flex-flow: row wrap;
     h1.brandtype {
       flex: 1;
@@ -124,23 +125,37 @@ main section {
       }
     }
     .tagline h2{
-      width: 50%;
+        width: 40%;
+    }
+  }
+
+  @media screen and (max-height: 30em)  {
+    .tagline h2 {
+      font-size: 1.0em;
+    }
+  }
+
+  @media screen and (min-width: $md-breakpoint) {
+    .tagline h2{
+      width: 48%;
     }
   }
 }
 
-
 main {
-  background-color: lighten($background-color, 2%);//rgba($background-color, 0.5);
+  background-color: lighten($background-color, 2%);
 
   section {
-    padding: 1rem;
+    h1, h2, h3 {
+      color: $headline-color;
+    }
 
     p {
       font-size: 1.1em;
       em {
         font-style: normal;
-        font-weight:  400;  
+        font-weight:  400;
+        color: black; 
       }
     }
 
@@ -153,43 +168,146 @@ main {
         display: none;
       }
     }
+  }
+}
 
-    @media screen and (min-width: $sm-breakpoint) {
+section#about, section#services section {
+  padding: 1rem;
+}
 
-      //width:
-      display: grid;
-      grid-template-columns: 48% 48%;
+section#about {
+  background-color: lighten($background-color, 8%);
+}
+
+section#services section { 
+  &:nth-child(even) {
+    background-color: lighten($background-color, 4%);
+  }
+}
+
+@media screen and (min-width: $sm-breakpoint) {
+
+  section#about {
+    display: grid;
+    grid-template-columns: 40% auto;
+    grid-template-areas: 
+      "header ."
+      "c1 ."
+      ". c2";
+    justify-content: space-between;
+
+    header {
+      grid-area: header;
+    }
+
+    div.text {
+      grid-area: c1;
+    }
+
+    figure {
+      grid-area: c2;
+    }
+  }
+
+  section#services section { 
+    //width:
+    display: grid;
+    justify-content: space-between;
+
+    header {
+      grid-area: header;
+      //max-width: 480px; 
+    }
+
+    div.text {
+      grid-area: c1;
+    }
+
+    figure {
+      grid-area: c2;
+    }
+
+    &:nth-child(odd) {
+      grid-template-columns: auto 6% 48%;
       grid-template-areas: 
-        "header header"
-        "text figure";
-      justify-content: space-between;
+      ". . header"
+      "c2 . . "
+      ". . c1";
 
-      header {
-        grid-area: header;
-      }
-
-      div {
-        //width: 50%;
-        //grid-column-start: 1;
-      }
-
-      figure {
-        //grid-column-start: 2;
-        //grid-row-start: 2;
+      header h3 {
+        text-align: right;
       }
     }
 
+    &:nth-child(even) {
+      grid-template-columns: 48% 6% auto;
+      grid-template-areas: 
+      "header . ."
+      ". . c2"
+      "c1 . .";
+    }
   }
-
 }
 
-footer {
+footer #contact {
   padding: 1em;
+  margin-top: 1em;
   //background-color: lighten($background-color, 4%);
   address {
     font-style: normal;
   }
+   
+  em {
+      font-weight: 400;
+  }
 }
+
+footer #copyright {
+  font-size: 0.8em;
+  text-align: right;
+  padding: 1em;
+}
+
+@media screen and (min-width:$sm-breakpoint) {
+
+  footer #contact {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+  }
+
+}
+
+@media screen and (min-width: $lg-breakpoint) {
+  section#about {
+    grid-template-columns: 48% auto;
+  }
+
+  section#services section {
+    &:nth-child(odd) {
+      grid-template-columns: auto 6% 36%;
+      .text, header {
+        padding-right: 2.8em;
+      }
+      figure {
+        padding-left: 2.8em;
+      }
+    }
+
+    &:nth-child(even) {
+      grid-template-columns: 30% 10% auto;
+      .text, header {
+        padding-left: 2.8em;
+      }
+      figure {
+        padding-right: 2.8em;
+      }
+    }
+  }
+  footer #contact {
+    padding-left: 2.8em;
+  }
+}
+
 
 
 
