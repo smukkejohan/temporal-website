@@ -4,17 +4,15 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 //const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 
 module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/[name]-[hash].js',
+    filename: 'js/[name]-[fullhash].js',
   },
-
-  //devServer: {
-  //  writeToDisk: true
-  //},
 
   plugins: [
     new CleanWebpackPlugin(),
@@ -23,14 +21,23 @@ module.exports = {
       //$: 'jquery',
     }),
 
-    new CopyWebpackPlugin([
+    new CopyWebpackPlugin({
+      patterns: [
       { from: 'static' },
-    ]),
+      ]
+    }),
 
     new HtmlWebpackPlugin({
       template: './src/index.html',
       inject: 'body'
-    })
+    }),
+
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "css/[name]-[fullhash].css",
+      chunkFilename: "[id].css"
+    }),
 
   ],
 
@@ -46,20 +53,23 @@ module.exports = {
         test: /\.(scss)$/,
         use: [
           {
-            loader: 'css-loader', // translates CSS into CommonJS modules
-          }, {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          'css-loader',
+          {
             loader: 'postcss-loader', // Run post css actions
             options: {
-              plugins: function () { // post css plugins, can be exported to postcss.config.js
-                return [
-                  require('precss'),
-                  require('autoprefixer')
-                ];
-              }
+              postcssOptions: {
+                plugins:
+                  [
+                    //require('postcss-import'),
+                    require('precss'),
+                    require('autoprefixer')
+                  ]
+              },
             }
-          }, {
-            loader: 'sass-loader',
-          }
+          },
+          'sass-loader'
         ]
       },
 
@@ -70,7 +80,7 @@ module.exports = {
           loader: 'url-loader',
           options: {
             limit: 8192,
-            name: '[name]-[hash].[ext]',
+            name: '[name]-[fullhash].[ext]',
             outputPath: 'images/'
           }
         }]
@@ -79,10 +89,9 @@ module.exports = {
       { test: /\.(ttf|eot|otf|woff2?)$/,
         use: [{
           loader: 'file-loader',
-          //
           options: {
             include: [/fonts/],
-            name: "[name]-[hash].[ext]",
+            name: "[name].[ext]",
             outputPath: 'fonts',
             publicPath: url => '../fonts/' + url
           }

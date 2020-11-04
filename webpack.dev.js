@@ -1,10 +1,11 @@
-const merge = require('webpack-merge');
+const { merge, mergeWithRules } = require('webpack-merge');
+const path = require('path');
+
 const common = require('./webpack.common.js');
 //const Visualizer = require('webpack-visualizer-plugin');
 
-module.exports = merge.smartStrategy({
-  'module.rules.use': 'prepend'
-})(common, {
+let conf = merge(
+  common, {
    mode: 'development',
    devtool: 'inline-source-map',
 
@@ -13,25 +14,18 @@ module.exports = merge.smartStrategy({
    },
 
    devServer: {
-    contentBase: './dist',
+    contentBase: path.join(__dirname, './dist'),
     compress: true,
     host: '0.0.0.0',
     port: 9000,
+    overlay: true,
+    open: 'chrome',
+    bonjour: true
   },
 
-  //plugins: [new Visualizer()],
+  //plugins: [new Visualizer()]
+  });
 
-  module: {
-    rules: [   
-      {
-        test: /\.(scss)$/,
-        use: [
-          {
-            loader: 'style-loader'
-          }
-        ]
-      }
-    ]
-  }
+console.log(conf)
 
-});
+module.exports = conf

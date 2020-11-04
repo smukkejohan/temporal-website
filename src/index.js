@@ -9,7 +9,6 @@ import _ from 'lodash'
 import {visibleHeightAtZDepth, visibleWidthAtZDepth, getRandomArbitrary} from './lib'
 
 import './style/main.scss'
-import style from './style/_variables.scss'
 
 var camera, scene, renderer, canvasContainer, stats
 const center = new Vector3(0,0,0)
@@ -19,8 +18,10 @@ if(debug) console.debug("initialCameraPosition", initialCameraPosition)
 
 const baseCameraPosition = new Vector3(0,0,window.innerWidth/2) // Base camera distance of the viewport width
 
-const primaryColor = new THREE.Color(style.backgroundcolor)
+const primaryColor = new THREE.Color(0.98, 0.737, 0.776)
 const backgroundColor = primaryColor.clone()
+
+
 const edgeColor = new THREE.Color("hsl(0, 0%, 0%)")
 
 var debug = false 
@@ -31,7 +32,6 @@ var targetX = 0
 var targetY = 0
 
 var loadingTween
-
 
 
 function init() {
