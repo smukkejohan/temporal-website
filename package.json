@@ -13,7 +13,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "postcss": "8.2.13"
+    "postcss": "8.4.31"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
