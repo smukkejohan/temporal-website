@@ -6,7 +6,7 @@ import { GUI } from 'three/examples/jsm/libs/dat.gui.module'
 import TWEEN from '@tweenjs/tween.js'
 import _ from 'lodash'
 
-import {visibleHeightAtZDepth, visibleWidthAtZDepth, getRandomArbitrary} from './lib'
+import {visibleHeightAtZDepth, visibleWidthAtZDepth, getRandomArbitrary} from '../lib/utils'
 
 import './style/main.scss'
 

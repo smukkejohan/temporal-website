@@ -2,11 +2,6 @@
 @import url('https://fonts.googleapis.com/css?family=Cabin:400');
 $font-family-sans-serif: 'Helvetica', sans-serif;
 
-@import "~normalize.css/normalize";
-
-//@import "~bootstrap/scss/bootstrap";
-//@import "~purecss";
-
 $font-path: '../fonts/';
 @font-face {
     font-family: 'Jellee';
@@ -307,16 +302,3 @@ footer #copyright {
     padding-left: 2.8em;
   }
 }
-
-
-
-
-/*
-@media screen and (min-width: $sm-breakpoint) {
-}
-@media screen and (min-width: 48em) {
-}
-@media screen and (min-width: 64em) {
-}
-@media screen and (min-width: 80em) {
-}*/
