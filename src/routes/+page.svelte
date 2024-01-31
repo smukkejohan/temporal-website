@@ -260,7 +260,7 @@ function onWindowResize() {
 }
 
 
-function onDocumentMouseMove( event ) {
+function onDocumentMouseMove( event: { clientX: number; clientY: number; } ) {
   mouseX = ( event.clientX - window.innerWidth/2 )
   mouseY = ( event.clientY - window.innerHeight/2 )
   mousePos.set(mouseX, mouseY)
@@ -320,8 +320,8 @@ onMount(() => {
     <div class="text">
     
       <p>
-      <em>Temporal studio</em> is Industrial Designer <em>Harvey Bewley</em> and Creative Programmer and Developer <em>Johan Bichel Lindegaard</em>.</p>
-      <p>Combining significant experience working in art and technology, product design, medical design, interactive installations, and design research.</p> 
+      <em>Temporal studio</em> is run by Creative Programmer and Developer <em>Johan Bichel Lindegaard</em>.</p>
+      <p>Johan has significant experience working in art and technology, prototype design, interactive installations and first and foremost as a software developer.</p> 
 
 
       <p>At our core, we are hands-on prototypers building objects that blur the boundaries of the digital and the physical.</p>
